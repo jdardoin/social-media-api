@@ -29,6 +29,15 @@ const userController = {
             console.log(err);
             res.status(400).json(err);
         }
+    }, 
+    async createUser(req, res) {
+        try {
+            const dbUserData = await User.create(req.body);
+            res.json(dbUserData);
+        } catch (err) {
+            console.log(err);
+            res.status(400).json(err);
+        }
     }
 };
 
