@@ -58,6 +58,69 @@ const userController = {
             res.status(400).json(err);
         }
     },
+    async deleteUser(req, res) {
+        try {
+            const dbUserData = await User.findOneAndDelete({
+                _id: req.params.id
+            });
+            if (!dbUserData) {
+                res.status(404).json({
+                    message: 'No user found with this id!'
+                });
+                return;
+            }
+            res.json(dbUserData);
+        } catch (err) {
+            console.log(err);
+            res.status(400).json(err);
+        }
+    },
+    async addFriend(req, res) {
+        try {
+            const dbUserData = await User.findOneAndUpdate({
+                _id: req.params.id
+            }, {
+                $addToSet: {
+                    friends: req.params.friendId
+                }
+            }, {
+                new: true
+            });
+            if (!dbUserData) {
+                res.status(404).json({
+                    message: 'No user found with this id!'
+                });
+                return;
+            }
+            res.json(dbUserData);
+        } catch (err) {
+            console.log(err);
+            res.status(400).json(err);
+        }
+    },
+    async removeFriend(req, res) {
+        try {
+            const dbUserData = await User.findOneAndUpdate({
+                _id: req.params.id
+            }, {
+                $pull: {
+                    friends: req.params.friendId
+                }
+            }, {
+                new: true
+            });
+            if (!dbUserData) {
+                res.status(404).json({
+                    message: 'No user found with this id!'
+                });
+                return;
+            }
+            res.json(dbUserData);
+        } catch (err) {
+            console.log(err);
+            res.status(400).json(err);
+        }
+    }
 };
 
 module.exports = userController;
